@@ -32,7 +32,7 @@ function loadTeacher() {
 	
 	function loadCourse() {
 		$.ajax({
-			url:'/api/course/list',
+			url:'/api/course',
 			success: function(data) {
 				$("#course_id").html("");
 				data.forEach(function(item) {
@@ -45,12 +45,15 @@ function loadTeacher() {
 		});
 	}
 	
-	function loadClasses() {
+	function loadClasses(pageNumber) {
 		$.ajax({
 			url : '/api/classroom/list',
+			contentType : "application/json; charset=utf-8",
+			data: {pageNumber: pageNumber},
 			success : function(data) {
 				$("#class-list").html("");
-				data.forEach(function(item) {
+				var classrooms = data.content;
+				classrooms.forEach(function(item) {
 					$("#class-list").append(
 						'<tr>\
 							<td>'+ item.courseId + '</td>\
@@ -65,6 +68,18 @@ function loadTeacher() {
 							</td>\
 						</tr>');
 					});
+					$("#pagination-class").html("");
+					var s = "";
+					var totalPage = data.totalPages;
+					var pageCurent = data.number;
+					for (i = 0; i < totalPage; i++) {
+						if(i == pageCurent) {
+							s += '<li class="page-item active"><a class="page-link" href="#" onclick = "loadClasses('+ i + ')">'+ (i + 1) +'</a></li>';
+						} else {
+							s += '<li class="page-item "><a class="page-link" href="#" onclick = "loadClasses('+ i + ')">'+ (i + 1) +'</a></li>';
+						}
+					}
+					$("#pagination-class").html(s);
 				},
 			error : function(e) {
 				console.log(e);
@@ -80,7 +95,7 @@ function loadTeacher() {
 			url : '/api/classroom/save',
 			data : JSON.stringify(classroom),
 			success : function(data) {
-				loadClasses();
+				loadClasses(0);
 			},
 			error : function(e) {
 				console.log(e);
@@ -98,8 +113,8 @@ function loadTeacher() {
 				console.log(data);
 				$("#class_id").val(data.id);
 				$("#course_id").val(data.courseId);
-				$("teacher_id").val(data.teacherId);
-				$("kid_id").val(data.kidId);
+				$("#teacher_id").val(data.teacherId);
+				$("#kid_id").val(data.kidId);
 				$("#class_time").val(data.startTime);
 				$("#class_status").val(data.status);
 			},
@@ -117,7 +132,7 @@ function loadTeacher() {
 				id : id
 			},
 			success : function(data) {
-				loadClasses();
+				loadClasses(0);
 			},
 			error : function(e) {
 				console.log(e);
@@ -132,7 +147,7 @@ function loadTeacher() {
 				id : id
 			},
 			success : function(data) {
-				loadClasses();
+				loadClasses(0);
 			},
 			error : function(e) {
 				console.log(e);
@@ -143,7 +158,7 @@ function loadTeacher() {
 		loadCourse();
 		loadTeacher();
 		loadKid();
-		loadClasses();
+		loadClasses(0);
 		$("#submit-classroom").click(function(){
 			var id = $("#class_id").val();
 			var courseId = $("#course_id").val();
@@ -168,7 +183,7 @@ function loadTeacher() {
 			loadCourse();
 			loadTeacher();
 			loadKid();
-			loadClasses();
+			loadClasses(0);
 		});
 		/* $('.datetimepicker').datetimepicker();
 		  

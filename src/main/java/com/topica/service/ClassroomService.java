@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.topica.entity.Classroom;
@@ -33,8 +35,8 @@ public class ClassroomService {
 		return classroomDao.findById(id);
 	}
 	
-	public List<Classroom> findAllClassroom() {
-		return classroomDao.findAll();
+	public Page<Classroom> findAllClassroom(Pageable pageable) {
+		return classroomDao.findAll(pageable);
 	}
 	
 	public Classroom getOne(Long id) {
@@ -43,6 +45,10 @@ public class ClassroomService {
 	
 	public void deleteByUserId(Long id) {
 		classroomDaoImpl.deleteByUserId(id);
+	}
+	
+	public void deleteByCourseId(Long id) {
+		classroomDaoImpl.deleteByCourseId(id);
 	}
 	
 	public List<Classroom> findClassByUserId(Long id) {

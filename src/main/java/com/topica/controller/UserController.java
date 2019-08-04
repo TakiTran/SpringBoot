@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,9 +40,9 @@ public class UserController {
 	}
 
 	@GetMapping("/api/user/list")
-	public List<User> findAll() {
-		Pageable pageable = PageRequest.of(1, 2);
-		return userService.findAllUser(pageable).getContent();
+	public Page<User> findAll(@RequestParam int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber, 2);
+		return userService.findAllUser(pageable);
 	}
 
 	@GetMapping("/api/user/delete/{id}")

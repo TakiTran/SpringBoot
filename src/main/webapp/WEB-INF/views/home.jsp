@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,6 +64,9 @@
 						 		
 						 		</tbody>
 						 	</table>
+						 	<ul class="pagination justify-content-center" id="pagination-user">
+								
+						  	</ul>
 						</div>
 					</div>
 				</div>
@@ -104,6 +108,9 @@
 						 		
 						 		</tbody>
 						 	</table>
+						 	<ul class="pagination justify-content-center" id="pagination-course">
+								
+						  	</ul>
 						</div>
 					</div>
 				</div>
@@ -178,6 +185,9 @@
 								
 								</tbody>
 							</table>
+							<ul class="pagination justify-content-center" id="pagination-class">
+								
+						  	</ul>
 						</div>
 					</div>
 				</div>
@@ -186,9 +196,9 @@
 		
 	</div>
 </body>
-<script src="js/course.js"></script> 
+<script src="js/course.js"></script>  
 <script src="js/user.js"></script> 
-<script src="js/classroom.js"></script> 
+<script src="js/classroom.js"></script>
 <script type="text/javascript">
 	
 </script>

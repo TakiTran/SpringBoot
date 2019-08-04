@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,8 +34,9 @@ public class ClassroomController {
 	private CourseService courseService;
 	
 	@GetMapping("/api/classroom/list")
-	public List<Classroom> findAll() {
-		return classroomService.findAllClassroom();
+	public Page<Classroom> findAll(@RequestParam int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber, 2);
+		return classroomService.findAllClassroom(pageable);
 	}
 	
 	@GetMapping("/api/classroom/{id}")
@@ -53,11 +57,12 @@ public class ClassroomController {
 	}
 	
 	@GetMapping("/api/classroom/delete/{id}")
-	public List<Classroom> deleteClassroom(@PathVariable Long id) {
+	public Page<Classroom> deleteClassroom(@PathVariable Long id) {
 		if(id != null) {
 			classroomService.deleteClassroom(id);
 		}
-		return classroomService.findAllClassroom();
+		Pageable pageable = PageRequest.of(0, 2);
+		return classroomService.findAllClassroom(pageable);
 	}
 	
 	@GetMapping("/api/classroom/changeStatus/{id}")

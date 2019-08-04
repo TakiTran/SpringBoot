@@ -23,8 +23,16 @@ public class ClassroomDaoImpl {
 		return (Classroom) query.getResultList().get(0);
 	}
 	
+	@Transactional
 	public void deleteByUserId(Long id) {
-		Query query = entityManager.createQuery("Delete Classroom as c where c.id = :id");
+		Query query = entityManager.createQuery("Delete Classroom as c where (c.kidId = :id) or (c.teacherId = :id)");
+		query.setParameter("id", id);
+		query.executeUpdate();
+	}
+	
+	@Transactional
+	public void deleteByCourseId(Long id) {
+		Query query = entityManager.createQuery("Delete Classroom as c where c.courseId");
 		query.setParameter("id", id);
 		query.executeUpdate();
 	}

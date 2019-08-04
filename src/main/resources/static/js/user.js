@@ -1,9 +1,13 @@
-function loadUsers() {
+function loadUsers(pageNumber) {
 	$.ajax({
 		url : '/api/user/list',
+		contentType : "application/json; charset=utf-8",
+		data: {pageNumber: pageNumber},
 		success : function(data) {
 			$("#users").html("");
-			data.forEach(function(item) {
+			console.log(data);
+			var users = data.content;
+			users.forEach(function(item) {
 				$("#users").append(
 					'<tr>\
 						<td>'+ item.name + '</td>\
@@ -14,7 +18,19 @@ function loadUsers() {
 						</td>\
 					</tr>');
 				});
-			},
+			$("#pagination-user").html("");
+			var s = "";
+			var totalPage = data.totalPages;
+			var pageCurent = data.number;
+			for (i = 0; i < totalPage; i++) {
+				if(i == pageCurent) {
+					s += '<li class="page-item active"><a class="page-link" href="#" onclick = "loadUsers('+ i + ')">'+ (i + 1) +'</a></li>';
+				} else {
+					s += '<li class="page-item "><a class="page-link" href="#" onclick = "loadUsers('+ i + ')">'+ (i + 1) +'</a></li>';
+				}
+			}
+			$("#pagination-user").html(s);
+		},
 		error : function(e) {
 			console.log(e);
 		}
@@ -28,7 +44,7 @@ function addUser(user) {
 		url : '/api/user/save',
 		data : JSON.stringify(user),
 		success : function(data) {
-			loadUsers();
+			loadUsers(0);
 		},
 		error : function(e) {
 			console.log(e);
@@ -60,7 +76,7 @@ function deleteUser(id) {
 			id : id
 		},
 		success : function(data) {
-			loadUsers();
+			loadUsers(0);
 		},
 		error : function(e) {
 			console.log(e);
@@ -68,7 +84,7 @@ function deleteUser(id) {
 	});
 }
 $(document).ready(function() {
-	loadUsers();
+	loadUsers(0);
 	$("#submit-user").click(function() {
 		var id = $("#user-id").val();
 		var name = $("#user-name").val();

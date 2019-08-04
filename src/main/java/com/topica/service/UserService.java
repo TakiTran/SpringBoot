@@ -21,6 +21,9 @@ public class UserService {
 	@Autowired
 	private UserDaoImpl userDaoImpl;
 	
+	@Autowired
+	private ClassroomService classroomService;
+	
 	public Optional<User> findById(Long id) {
 		return userDao.findById(id);
 	}
@@ -30,6 +33,7 @@ public class UserService {
 	}
 	
 	public void deleteUser (Long id) {
+		classroomService.deleteByUserId(id);
 		userDao.deleteById(id);
 	}
 	

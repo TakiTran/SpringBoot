@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.topica.entity.Course;
@@ -19,11 +21,16 @@ public class CourseService {
 	@Autowired
 	private CourseDaoImpl courseDaoImpl;
 	
+	@Autowired
+	private ClassroomService classroomService;
+	
+	
 	public Course saveCourse(Course course ) {
 		return courseDao.save(course);
 	}
 	
 	public void deleteCourse (Long id) {
+		classroomService.deleteByUserId(id);
 		courseDao.deleteById(id);
 	}
 	
@@ -31,7 +38,11 @@ public class CourseService {
 		return courseDao.findById(id);
 	}
 	
-	public List<Course> findAllCourse() {
+	public Page<Course> findAllCourse(Pageable pageable) {
+		return courseDao.findAll(pageable);
+	}
+	
+	public List<Course> findAll() {
 		return courseDao.findAll();
 	}
 	

@@ -1,9 +1,12 @@
-function loadCourses() {
+function loadCourses(pageNumber) {
 	$.ajax({
 			url : '/api/course/list',
+			contentType : "application/json; charset=utf-8",
+			data: {pageNumber: pageNumber},
 			success : function(data) {
 				$("#courses").html("");
-				data.forEach(function(item) {
+				var courses = data.content;
+				courses.forEach(function(item) {
 				$("#courses").append(
 					'<tr>\
 						<td>'+ item.name+ '</td>\
@@ -14,6 +17,18 @@ function loadCourses() {
 						</td>\
 					</tr>');
 				});
+				$("#pagination-course").html("");
+				var s = "";
+				var totalPage = data.totalPages;
+				var pageCurent = data.number;
+				for (i = 0; i < totalPage; i++) {
+					if(i == pageCurent) {
+						s += '<li class="page-item active"><a class="page-link" href="#" onclick = "loadCourses('+ i + ')">'+ (i + 1) +'</a></li>';
+					} else {
+						s += '<li class="page-item "><a class="page-link" href="#" onclick = "loadCourses('+ i + ')">'+ (i + 1) +'</a></li>';
+					}
+				}
+				$("#pagination-course").html(s);
 			},
 			error : function(e) {
 				console.log(e);
@@ -28,7 +43,7 @@ function addCourse(course) {
 		url : '/api/course/save',
 		data : JSON.stringify(course),
 		success : function(data) {
-			loadCourses();
+			loadCourses(0);
 		},
 		error : function(e) {
 			console.log(e);
@@ -60,7 +75,7 @@ function deleteCourse(id) {
 			id : id
 		},
 		success : function(data) {
-			loadCourses();
+			loadCourses(0);
 		},
 		error : function(e) {
 			console.log(e);
@@ -68,7 +83,7 @@ function deleteCourse(id) {
 	});
 }
 $(document).ready(function() {
-	loadCourses();
+	loadCourses(0);
 	$("#submit-course").click(function() {
 		var id = $("#course-id").val();
 		var name = $("#course-name").val();
